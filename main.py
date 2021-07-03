@@ -3,6 +3,7 @@ from PIL import ImageTk, Image
 from phue import Bridge
 import webbrowser
 import os
+from ttkthemes import ThemedStyle
 
 class Main:
     def __init__(self):
@@ -20,6 +21,8 @@ class Main:
         self.window.title("piControl")
         self.window.resizable(True, True)
         self.window.geometry("800x480")
+        style = ThemedStyle(self.window)
+        style.set_theme("equilux")
 
         self.mainFrame = Frame(self.window)
         self.light_img = PhotoImage(file="lights.png")
