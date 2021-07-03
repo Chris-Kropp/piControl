@@ -11,7 +11,7 @@ class Main:
         self.chair_bri = self.b.get_light(1, "bri")
         self.desk_on = self.b.get_light(2, "on")
         self.desk_bri = self.b.get_light(2, "bri")
-        self.screen_bri = int(open("cat /sys/class/backlight/rpi_backlight/brightness").read())
+        self.screen_bri = int(open("/sys/class/backlight/rpi_backlight/brightness").read())
         self.fullscreen = True
         self.window = Tk()
         # self.window.attributes('-type', 'dock')
