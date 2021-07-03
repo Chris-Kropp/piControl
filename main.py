@@ -175,7 +175,7 @@ class Main:
         self.screen_bri = brightness
         os.system("echo {} > /sys/class/backlight/rpi_backlight/brightness".format(brightness))
 
-    def toggle_fullscreen(self, brightness):
+    def toggle_fullscreen(self):
         self.fullscreen = not self.fullscreen
         self.window.attributes('-fullscreen', self.fullscreen)
 
