@@ -2,6 +2,7 @@ from tkinter import *
 from PIL import ImageTk, Image
 from phue import Bridge
 import webbrowser
+import os
 
 class Main:
     def __init__(self):
@@ -10,13 +11,15 @@ class Main:
         self.chair_bri = self.b.get_light(1, "bri")
         self.desk_on = self.b.get_light(2, "on")
         self.desk_bri = self.b.get_light(2, "bri")
+        self.screen_bri = int(open("cat /sys/class/backlight/rpi_backlight/brightness").read())
+        self.fullscreen = True
         self.window = Tk()
         # self.window.attributes('-type', 'dock')
-        # self.window.attributes('-fullscreen', True)
+        self.window.attributes('-fullscreen', True)
         self.window.focus_force()
         self.window.title("piControl")
         self.window.resizable(True, True)
-        self.window.geometry("720x480")
+        self.window.geometry("800x480")
 
         self.mainFrame = Frame(self.window)
         self.light_img = PhotoImage(file="lights.png")
@@ -38,14 +41,14 @@ class Main:
 
         lightFrame = Frame(frame_one, width=100, height=100)
         lightFrame.grid_propagate(False)
-        Button(lightFrame, text="Lights", image=self.light_img, compound=TOP, command=self.loadLights).grid(sticky="wens")
+        Button(lightFrame, text="Lights", image=self.light_img, compound=TOP, command=self.load_lights).grid(sticky="wens")
         lightFrame.columnconfigure(0, weight=1)
         lightFrame.rowconfigure(0, weight=1)
         lightFrame.pack(fill="both", expand=True)
 
         settingsFrame = Frame(frame_one, width=100, height=100)
         settingsFrame.grid_propagate(False)
-        Button(settingsFrame, text="Settings", image=self.settings_img, compound=TOP).grid(sticky="wens")
+        Button(settingsFrame, text="Settings", image=self.settings_img, compound=TOP, command=self.load_settings).grid(sticky="wens")
         settingsFrame.columnconfigure(0, weight=1)
         settingsFrame.rowconfigure(0, weight=1)
         settingsFrame.pack(fill="both", expand=True)
@@ -84,7 +87,7 @@ class Main:
         sixthFrame.rowconfigure(0, weight=1)
         sixthFrame.pack(fill="both", expand=True)
 
-    def loadLights(self):
+    def load_lights(self):
         for item in self.mainFrame.winfo_children():
             item.pack_forget()
 
@@ -116,6 +119,35 @@ class Main:
         lightFrameTwo.rowconfigure(0, weight=1)
         lightFrameTwo.pack(expand=True, fill="both", side=RIGHT)
 
+    def load_settings(self):
+        for item in self.mainFrame.winfo_children():
+            item.pack_forget()
+
+        frame_back = Frame(self.mainFrame, height=10, background="")
+        Button(frame_back, text="<", compound=TOP, command=self.loadMain).grid(sticky="wens")
+
+        frame_back.pack(side="top", fill="both", expand=False)
+
+        frame_one = Frame(self.mainFrame)
+        frame_one.pack(side="left", fill="both", expand=True)
+
+        briFrame = Frame(frame_one, width=100, height=100)
+        briFrame.grid_propagate(False)
+        self.bri_scale = Scale(briFrame, from_=255, to=25, length=400, showvalue=0, resolution=10, command=self.screen_brightness)
+        self.bri_scale.pack(side=LEFT)
+        self.bri_scale.set(self.screen_bri)
+        Button(briFrame, text="Exit", image=self.power_img, compound=TOP, command=self.toggle_fullscreen).grid(padx=(25, 0), sticky="WENS")
+        briFrame.columnconfigure(0, weight=1)
+        briFrame.rowconfigure(0, weight=1)
+        briFrame.pack(side=LEFT, fill="both", expand=True)
+
+        exitFrame = Frame(frame_one, width=100, height=100)
+        exitFrame.grid_propagate(False)
+        Button(exitFrame, text="Desk", image=self.power_img, compound=TOP, command=self.exit).grid(padx=(0, 25), sticky="WENS")
+        exitFrame.columnconfigure(0, weight=1)
+        exitFrame.rowconfigure(0, weight=1)
+        exitFrame.pack(expand=True, fill="both", side=RIGHT)
+
     def toggle_chair(self):
         self.chair_on = not self.chair_on
         self.b.set_light(1, 'on', self.chair_on)
@@ -137,6 +169,17 @@ class Main:
             self.desk_bri = int(brightness)
         else:
             self.desk_scale.set(self.desk_bri)
+
+    def screen_brightness(self, brightness):
+        self.screen_bri = brightness
+        os.system("echo {} > /sys/class/backlight/rpi_backlight/brightness".format(brightness))
+
+    def toggle_fullscreen(self, brightness):
+        self.fullscreen = not self.fullscreen
+        self.window.attributes('-fullscreen', self.fullscreen)
+
+    def exit(self):
+        self.window.destroy()
 
     def open_alarm(self):   #TODO: replace with function that gets and sends data to api instead of opening web interface
         webbrowser.open("192.168.0.45:8080")
