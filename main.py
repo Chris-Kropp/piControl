@@ -27,6 +27,7 @@ class Main:
         self.alarm_img = PhotoImage(file="alarm.png")
         self.stock_img = PhotoImage(file="stocks.png")
         self.power_img = PhotoImage(file="power.png")
+        self.fullscreen_img = PhotoImage(file="fullscreen.png")
         self.loadMain()
 
         mainloop()
@@ -136,7 +137,7 @@ class Main:
         self.bri_scale = Scale(briFrame, from_=255, to=25, length=400, showvalue=0, resolution=10, command=self.screen_brightness)
         self.bri_scale.pack(side=LEFT)
         self.bri_scale.set(self.screen_bri)
-        Button(briFrame, text="Exit", image=self.power_img, compound=TOP, command=self.toggle_fullscreen).grid(padx=(25, 0), sticky="WENS")
+        Button(briFrame, text="Exit", image=self.fullscreen_img, compound=TOP, command=self.toggle_fullscreen).grid(padx=(25, 0), sticky="WENS")
         briFrame.columnconfigure(0, weight=1)
         briFrame.rowconfigure(0, weight=1)
         briFrame.pack(side=LEFT, fill="both", expand=True)
