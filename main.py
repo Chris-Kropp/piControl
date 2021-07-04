@@ -22,7 +22,7 @@ class Main:
         self.window.resizable(True, True)
         self.window.geometry("800x480")
         style = ThemedStyle(self.window)
-        style.set_theme("equilux")
+        style.set_theme("radiance")
 
         self.mainFrame = Frame(self.window)
         self.light_img = PhotoImage(file="lights.png")
@@ -95,7 +95,7 @@ class Main:
         for item in self.mainFrame.winfo_children():
             item.pack_forget()
 
-        frame_back = Frame(self.mainFrame, height=10, background="")
+        frame_back = Frame(self.mainFrame, height=20, width=20, background="")
         Button(frame_back, text="<", compound=TOP, command=self.loadMain).grid(sticky="wens")
 
         frame_back.pack(side="top", fill="both", expand=False)
@@ -105,20 +105,20 @@ class Main:
 
         lightFrame = Frame(frame_one, width=100, height=100)
         lightFrame.grid_propagate(False)
-        self.chair_scale = Scale(lightFrame, from_=254, to=30, length=400, showvalue=0, resolution=10, command=self.chair_light_brightness)
+        self.chair_scale = Scale(lightFrame, from_=254, to=30, length=440, width=50, showvalue=0, resolution=10, command=self.chair_light_brightness)
         self.chair_scale.pack(side=LEFT)
         self.chair_scale.set(self.chair_bri)
-        Button(lightFrame, text="Chair", image=self.power_img, compound=TOP, command=self.toggle_chair).grid(padx=(25, 0), sticky="WENS")
+        Button(lightFrame, text="Chair", image=self.power_img, compound=TOP, command=self.toggle_chair).grid(padx=(52, 0), sticky="WENS")
         lightFrame.columnconfigure(0, weight=1)
         lightFrame.rowconfigure(0, weight=1)
         lightFrame.pack(side=LEFT, fill="both", expand=True)
 
         lightFrameTwo = Frame(frame_one, width=100, height=100)
         lightFrameTwo.grid_propagate(False)
-        self.desk_scale = Scale(lightFrameTwo, from_=254, to=30, length=400, showvalue=0, resolution=10, command=self.desk_light_brightness)
+        self.desk_scale = Scale(lightFrameTwo, from_=254, to=30, length=440, width=50, showvalue=0, resolution=10, command=self.desk_light_brightness)
         self.desk_scale.pack(side=RIGHT)
         self.desk_scale.set(self.desk_bri)
-        Button(lightFrameTwo, text="Desk", image=self.power_img, compound=TOP, command=self.toggle_desk).grid(padx=(0, 25), sticky="WENS")
+        Button(lightFrameTwo, text="Desk", image=self.power_img, compound=TOP, command=self.toggle_desk).grid(padx=(0, 52), sticky="WENS")
         lightFrameTwo.columnconfigure(0, weight=1)
         lightFrameTwo.rowconfigure(0, weight=1)
         lightFrameTwo.pack(expand=True, fill="both", side=RIGHT)
@@ -127,7 +127,7 @@ class Main:
         for item in self.mainFrame.winfo_children():
             item.pack_forget()
 
-        frame_back = Frame(self.mainFrame, height=10, background="")
+        frame_back = Frame(self.mainFrame, height=20, width=20, background="")
         Button(frame_back, text="<", compound=TOP, command=self.loadMain).grid(sticky="wens")
 
         frame_back.pack(side="top", fill="both", expand=False)
@@ -137,17 +137,17 @@ class Main:
 
         briFrame = Frame(frame_one, width=100, height=100)
         briFrame.grid_propagate(False)
-        self.bri_scale = Scale(briFrame, from_=255, to=25, length=400, showvalue=0, resolution=10, command=self.screen_brightness)
+        self.bri_scale = Scale(briFrame, from_=255, to=25, length=440, width=50, showvalue=0, resolution=10, command=self.screen_brightness)
         self.bri_scale.pack(side=LEFT)
         self.bri_scale.set(self.screen_bri)
-        Button(briFrame, text="Toggle Fullscreen", image=self.fullscreen_img, compound=TOP, command=self.toggle_fullscreen).grid(padx=(25, 0), sticky="WENS")
+        Button(briFrame, text="Toggle Fullscreen", image=self.fullscreen_img, compound=TOP, command=self.toggle_fullscreen).grid(padx=(52, 0), sticky="WENS")
         briFrame.columnconfigure(0, weight=1)
         briFrame.rowconfigure(0, weight=1)
         briFrame.pack(side=LEFT, fill="both", expand=True)
 
         exitFrame = Frame(frame_one, width=100, height=100)
         exitFrame.grid_propagate(False)
-        Button(exitFrame, text="Exit", image=self.power_img, compound=TOP, command=self.exit).grid(padx=(0, 25), sticky="WENS")
+        Button(exitFrame, text="Exit", image=self.power_img, compound=TOP, command=self.exit).grid(padx=(0, 0), sticky="WENS")
         exitFrame.columnconfigure(0, weight=1)
         exitFrame.rowconfigure(0, weight=1)
         exitFrame.pack(expand=True, fill="both", side=RIGHT)
