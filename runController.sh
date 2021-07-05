@@ -1,4 +1,6 @@
-!#/usr/bin/bash
+#!/usr/bin/bash
 
-sudo su root
-python3 main.py
+cd /home/pi/Documents/piControl
+sudo su root << Eol
+/usr/bin/python3 main.py
+Eol
