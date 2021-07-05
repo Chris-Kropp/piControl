@@ -15,10 +15,6 @@ class Main:
         # , background=self.background_color, activebackground=self.active_background_color, foreground=self.text_color, activeforeground=self.text_color
 
         self.b = Bridge("192.168.0.20")
-        self.chair_on = self.b.get_light(1, "on")
-        self.chair_bri = self.b.get_light(1, "bri")
-        self.desk_on = self.b.get_light(2, "on")
-        self.desk_bri = self.b.get_light(2, "bri")
         try:
             self.screen_bri = int(open("/sys/class/backlight/rpi_backlight/brightness").read())
         except:
@@ -103,6 +99,11 @@ class Main:
     def load_lights(self):
         for item in self.mainFrame.winfo_children():
             item.pack_forget()
+            
+        self.chair_on = self.b.get_light(1, "on")
+        self.chair_bri = self.b.get_light(1, "bri")
+        self.desk_on = self.b.get_light(2, "on")
+        self.desk_bri = self.b.get_light(2, "bri")
 
         frame_back = Frame(self.mainFrame, height=20, width=20, background=self.background_color)
         Button(frame_back, text="<", compound=TOP, command=self.loadMain, background=self.background_color, activebackground=self.active_background_color, foreground=self.text_color, activeforeground=self.text_color).grid(sticky="wens")
