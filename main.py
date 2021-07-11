@@ -27,6 +27,8 @@ class Main:
         self.window.title("piControl")
         self.window.resizable(True, True)
         self.window.geometry("800x480")
+        self.window.config(cursor="none")
+        self.window.iconphoto(True, PhotoImage(file="piControl.png")
 
         self.mainFrame = Frame(self.window)
         self.light_img = PhotoImage(file="lights.png")
@@ -98,6 +100,7 @@ class Main:
         sixthFrame.pack(fill="both", expand=True)
 
     def load_lights(self):
+        # add check if timed out screen
         for item in self.mainFrame.winfo_children():
             item.pack_forget()
 
