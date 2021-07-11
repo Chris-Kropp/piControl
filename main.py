@@ -32,6 +32,7 @@ class Main:
         self.light_img = PhotoImage(file="lights.png")
         self.settings_img = PhotoImage(file="settings.png")
         self.alarm_img = PhotoImage(file="alarm.png")
+        self.system_img = PhotoImage(file="system.png")
         self.stock_img = PhotoImage(file="stocks.png")
         self.power_img = PhotoImage(file="power.png")
         self.fullscreen_img = PhotoImage(file="fullscreen.png")
@@ -74,7 +75,7 @@ class Main:
 
         alarmFrame = Frame(frame_two, width=100, height=100)
         alarmFrame.grid_propagate(False)
-        Button(alarmFrame, text="Test", background=self.background_color, activebackground=self.active_background_color, foreground=self.text_color, activeforeground=self.text_color).grid(sticky="wens")
+        Button(alarmFrame, text="PC Stats", image=self.system_img, compound=TOP, background=self.background_color, activebackground=self.active_background_color, foreground=self.text_color, activeforeground=self.text_color).grid(sticky="wens")
         alarmFrame.columnconfigure(0, weight=1)
         alarmFrame.rowconfigure(0, weight=1)
         alarmFrame.pack(fill="both", expand=True)
@@ -91,7 +92,7 @@ class Main:
 
         sixthFrame = Frame(frame_three, width=100, height=100)
         sixthFrame.grid_propagate(False)
-        Button(sixthFrame, text="Test", background=self.background_color, activebackground=self.active_background_color, foreground=self.text_color, activeforeground=self.text_color).grid(sticky="wens")
+        Button(sixthFrame, text="Test", compound=TOP, background=self.background_color, activebackground=self.active_background_color, foreground=self.text_color, activeforeground=self.text_color).grid(sticky="wens")
         sixthFrame.columnconfigure(0, weight=1)
         sixthFrame.rowconfigure(0, weight=1)
         sixthFrame.pack(fill="both", expand=True)
@@ -99,7 +100,7 @@ class Main:
     def load_lights(self):
         for item in self.mainFrame.winfo_children():
             item.pack_forget()
-            
+
         self.chair_on = self.b.get_light(1, "on")
         self.chair_bri = self.b.get_light(1, "bri")
         self.desk_on = self.b.get_light(2, "on")
