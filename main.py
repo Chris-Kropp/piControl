@@ -28,7 +28,7 @@ class Main:
         self.window.title("piControl")
         self.window.resizable(True, True)
         self.window.geometry("800x480")
-        # self.window.config(cursor="none")
+        self.window.config(cursor="none")
         self.window.iconphoto(True, PhotoImage(file="piControl.png"))
 
         self.mainFrame = Frame(self.window)
