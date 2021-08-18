@@ -28,7 +28,7 @@ class Main:
         self.window.title("piControl")
         self.window.resizable(True, True)
         self.window.geometry("800x480")
-        self.window.config(cursor="none")
+        # self.window.config(cursor="none")
         self.window.iconphoto(True, PhotoImage(file="piControl.png"))
 
         self.mainFrame = Frame(self.window)
@@ -123,7 +123,7 @@ class Main:
             self.desk_bri = self.b.get_light(2, "bri")
 
             frame_back = Frame(self.mainFrame, height=20, width=20, background=self.background_color)
-            Button(frame_back, text="<", compound=TOP, command=self.loadMain, background=self.background_color, activebackground=self.active_background_color, foreground=self.text_color, activeforeground=self.text_color).grid(sticky="wens")
+            Button(frame_back, font=("default", 16), width=4, text="<", compound=TOP, command=self.loadMain, background=self.background_color, activebackground=self.active_background_color, foreground=self.text_color, activeforeground=self.text_color).grid(sticky="wens")
 
             frame_back.pack(side="top", fill="both", expand=False)
 
@@ -156,7 +156,7 @@ class Main:
                 item.pack_forget()
 
             frame_back = Frame(self.mainFrame, height=20, width=20, background=self.background_color)
-            Button(frame_back, text="<", compound=TOP, command=self.loadMain, background=self.background_color, activebackground=self.active_background_color, foreground=self.text_color, activeforeground=self.text_color).grid(sticky="wens")
+            Button(frame_back, font=("default", 16), width=4, text="<", compound=TOP, command=self.loadMain, background=self.background_color, activebackground=self.active_background_color, foreground=self.text_color, activeforeground=self.text_color).grid(sticky="wens")
 
             frame_back.pack(side="top", fill="both", expand=False)
 
@@ -186,7 +186,8 @@ class Main:
                 item.pack_forget()
 
             frame_back = Frame(self.mainFrame, height=20, width=20, background=self.background_color)
-            Button(frame_back, text="<", compound=TOP, command=self.loadMain, background=self.background_color, activebackground=self.active_background_color, foreground=self.text_color, activeforeground=self.text_color).grid(sticky="wens")
+            Button(frame_back, font=("default", 16), width=4, text="<", compound=TOP, command=self.loadMain, background=self.background_color, activebackground=self.active_background_color, foreground=self.text_color, activeforeground=self.text_color).pack(side=LEFT)
+            Button(frame_back, font=("default", 16), width=4, text="+", compound=TOP, command=self.create_alarm, background=self.background_color, activebackground=self.active_background_color, foreground=self.text_color, activeforeground=self.text_color).pack(side=RIGHT)
 
             frame_back.pack(side="top", fill="both", expand=False)
 
@@ -198,7 +199,7 @@ class Main:
                 item = item.replace("\"", "").replace("}", "")
                 alarms.append(item)
 
-            sf = ScrolledFrame(self.mainFrame, width=640, height=480, background=self.background_color, scrollbars="vertical")
+            sf = ScrolledFrame(self.mainFrame, width=20, height=480, background=self.background_color, scrollbars="vertical")
             sf.pack(side="top", expand=1, fill="both")
 
             sf.bind_arrow_keys(self.mainFrame)
@@ -207,8 +208,35 @@ class Main:
             inner_frame = sf.display_widget(Frame)
 
             for row in range(len(alarms)):
-                Label(inner_frame, width=15, height=5, borderwidth=2, relief="groove", anchor="center", justify="center", text=alarms[row]).grid(row=row, column=0, padx=0, pady=0)
-                Button(inner_frame, text="X", compound=TOP, command=self.loadMain, background=self.background_color, activebackground=self.active_background_color, foreground=self.text_color, activeforeground=self.text_color).grid(row=row, column=1, padx=0, pady=0)
+                Label(inner_frame, width=0, height=0, borderwidth=5, relief="groove", anchor="center", justify="center", text=alarms[row], font=("default", 48)).grid(row=row, column=0, padx=0, pady=0)
+                Button(inner_frame, font=("default", 28), width=3, text="X", compound=TOP, command=lambda btn_time=alarms[row]:self.delete_alarm(btn_time), background=self.background_color, activebackground=self.active_background_color, foreground=self.text_color, activeforeground=self.text_color).grid(row=row, column=1, padx=0, pady=0)
+
+    def create_alarm(self):
+        if(self.checkTime()):
+            for item in self.mainFrame.winfo_children():
+                item.pack_forget()
+
+            frame_back = Frame(self.mainFrame, height=20, width=20, background=self.background_color)
+            Button(frame_back, font=("default", 16), width=4, text="<", compound=TOP, command=self.load_alarm, background=self.background_color, activebackground=self.active_background_color, foreground=self.text_color, activeforeground=self.text_color).pack(side=LEFT)
+            frame_back.pack(side="top", fill="both", expand=False)
+
+            self.time_var = StringVar()
+            self.time_var.set("00:00")
+            frame_time = Frame(self.mainFrame, background=self.background_color)
+            time = Label(frame_time, textvariable=self.time_var, width=0, height=0, anchor="center", justify="center", font=("default", 48), background=self.background_color, foreground=self.text_color).pack(side=TOP)
+            frame_time.pack(side="top", fill="both", expand=False)
+
+            self.alarm_error_var = StringVar()
+
+            adjust_frame = Frame(self.mainFrame, background=self.background_color)
+            self.hour_scale = Scale(adjust_frame, from_=0, to=23, length=780, width=50, showvalue=0, orient=HORIZONTAL, command=self.set_time, background=self.background_color, activebackground=self.background_color, foreground=self.background_color, highlightbackground=self.background_color)
+            self.hour_scale.pack(side=TOP)
+            self.minute_scale = Scale(adjust_frame, from_=0, to=59, length=780, width=50, showvalue=0, orient=HORIZONTAL, command=self.set_time, background=self.background_color, activebackground=self.background_color, foreground=self.background_color, highlightbackground=self.background_color)
+            self.minute_scale.pack(side=TOP)
+            error = Label(adjust_frame, textvariable=self.alarm_error_var, width=0, height=0, anchor="center", justify="center", font=("default", 24), background=self.background_color, foreground=self.text_color).pack(side=TOP)
+            Button(adjust_frame, font=("default", 16), text="Create Alarm", compound=TOP, command=self.send_alarm, background=self.background_color, activebackground=self.active_background_color, foreground=self.text_color, activeforeground=self.text_color).pack(side=TOP)
+            adjust_frame.pack(side="top", fill="both", expand=True)
+
 
     def toggle_chair(self):
         if(self.checkTime()):
@@ -225,6 +253,7 @@ class Main:
             if(self.chair_on):
                 self.b.set_light(1, 'bri', int(brightness))
                 self.chair_bri = int(brightness)
+                print(brightness)
             else:
                 self.chair_scale.set(self.chair_bri)
 
@@ -235,6 +264,33 @@ class Main:
                 self.desk_bri = int(brightness)
             else:
                 self.desk_scale.set(self.desk_bri)
+
+    def set_time(self, unused):
+        if(self.checkTime()):
+            hour = str(self.hour_scale.get())
+            minute = str(self.minute_scale.get())
+            if(len(hour) < 2):
+                hour = "0" + str(hour)
+            if(len(minute) < 2):
+                minute = "0" + str(minute)
+            self.time_var.set(str(hour) + ":" + str(minute))
+
+    def send_alarm(self):
+        if(self.checkTime()):
+            time = self.time_var.get()
+            response = requests.get("http://192.168.0.45:8080/checkAlarm?time=" + time)
+            response = response.text.split(", ")
+            response = response[0].split(": ")[1]
+            response = response.replace("\"", "").replace("}", "")
+            if(response == "false"):
+                self.load_alarm()
+            else:
+                self.alarm_error_var.set("Could not create alarm, it already exists.")
+
+    def delete_alarm(self, time):
+        response = requests.get("http://192.168.0.45:8080/delete?time=" + time)
+        response = response.text.split(", ")
+        self.load_alarm()
 
     def screen_brightness(self, brightness):
         if(self.checkTime()):
